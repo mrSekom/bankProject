@@ -1,0 +1,146 @@
+import { StyleSheet } from 'react-native';
+export default StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#F8F8F8",
+      },
+      header: {
+        flex: 0.3,
+        backgroundColor: "#F8F8F8",
+        padding: 30,
+        alignItems: 'center',
+      },
+      body: {
+        flex: 0.4,
+        alignItems: 'center',
+      },
+      buttonContainer: {
+        width: '100%',
+        justifyContent: "center",
+      },
+      buttonStyleHesap: {
+        backgroundColor: "#708090",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5,
+        padding: 6,
+        margin: 5,
+        flexDirection: "row"
+      },
+      buttonColorMenu: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontFamily: 'Bahnschrift',
+        fontSize: 14
+      },
+      buttonStyleAbone: {
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        borderRadius: 5,
+        padding: 6,
+        margin: 5,
+        flexDirection: "row",
+        borderWidth: 0.8,
+        borderColor: "#708090",
+      },
+      buttonStyleMenu: {
+        backgroundColor: "#708090",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5,
+        padding: 15,
+        margin: 5,
+        flexDirection: "row"
+      },
+      hesapBilgiContainer: {
+        flex: 17,
+        backgroundColor: "white",
+        padding: 5,
+        margin: 10,
+        borderWidth: 0.4,
+        borderRadius: 5,
+        borderColor: "#708090",
+        fontFamily: 'Bahnschrift',
+      },
+      hesapText: {
+        marginTop: 5,
+        fontSize: 14,
+        fontFamily: 'Bahnschrift',
+      },
+      buttonStyleKurum: {
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5,
+        padding: 12,
+        margin: 5,
+        flexDirection: "row",
+        borderWidth: 0.8,
+        borderColor: "black",
+      },
+      buttonColor: {
+        fontFamily: 'Bahnschrift',
+      },
+      buttonStyle: {
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5,
+        padding: 12,
+        margin: 5,
+        flexDirection: "row",
+        borderWidth: 0.8,
+        borderColor: "#708090",
+      },
+      contContainer:{
+        justifyContent: "flex-start",
+        alignItems: "flex-start",
+        borderRadius: 5,
+        padding: 5,
+        margin: 5,
+        flexDirection: "row",
+        borderWidth: 0.8,
+        borderColor: "#708090",
+        fontFamily: 'Bahnschrift',
+      },
+      hesapNo: {
+        fontWeight: "bold",
+        fontSize: 16,
+        fontFamily: 'Bahnschrift',
+      },
+      infoColor: {
+        fontFamily: 'Bahnschrift',
+        color: '#708090'
+      },
+      buttonStyleOnayEkrani: {
+        justifyContent: "center",
+        alignItems: "flex-start",
+        borderRadius: 5,
+        padding: 12,
+        margin: 5,
+        flexDirection: "row",
+        borderWidth: 0.8,
+        borderColor: "#708090",
+      },
+      hesapBilgiContainerFO: {
+        flex: 17,
+        padding: 5,
+        margin: 6,
+        borderWidth: 0.8,
+        borderRadius: 5,
+        borderColor: "#708090",
+        fontFamily: 'Bahnschrift',
+      },
+      total: {
+        fontSize: 14,
+        color: "gray",
+      },
+      cost: {
+        fontSize: 22,
+        color: "#708090",
+        fontWeight: 'bold',
+      },
+      bodyHome: {
+        flex: 0.5,
+        backgroundColor: "#F8F8F8",
+        alignItems: 'center',
+      },
+})
