@@ -38,7 +38,7 @@ export default class ParaIslemleri extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.buttonStyle}
-                onPress={() => {this.props.navigation.navigate('VirmanAliciHesap',{ token: this.state.token })}}>
+                onPress={() => {this.props.navigation.navigate('VirmanGonderenHesap',{ token: this.state.token })}}>
                 <Icon name="retweet" size={16} color="black" backgroundColor="#708090">
                 <Text style={styles.buttonColor} >  VİRMAN </Text>
                 </Icon>

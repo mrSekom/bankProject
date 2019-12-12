@@ -4,8 +4,10 @@ import { Alert } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
+import HGSgiris from './Components/Hesap/HGSgiris';
 import Hesaplar from './Components/Hesap/Hesaplar';
 import Hesaplarim from './Components/Hesap/Hesaplarim';
+import HGShesapAc from './Components/Hesap/HGShesapAc';
 import HesapDetaylari from './Components/Hesap/HesapDetaylari';
 import HesapHareketleri from './Components/Hesap/HesapHareketleri';
 import HesapParaCekme from './Components/Hesap/HesapParaCekme';
@@ -476,6 +478,51 @@ const MainNavigator = createStackNavigator({
     screen: Hesaplar,
     navigationOptions: ({navigation}) => ({
       title: 'Hesaplar',
+      headerStyle: {
+        backgroundColor: '#708090',
+      },
+      headerTitleStyle: {
+        color: 'white',
+      },
+      headerTintColor: 'white', // header back button color
+      headerRight: (
+        <Icon
+          name="home"
+          size={25}
+          color="white"
+          style={{marginRight: 15}}
+          onPress={() => navigation.navigate('Anasayfa')}
+        />
+      ),
+    }),
+  },
+
+  HGSgiris: {
+    screen: HGSgiris,
+    navigationOptions: ({navigation}) => ({
+      title: 'HGSgiris',
+      headerStyle: {
+        backgroundColor: '#708090',
+      },
+      headerTitleStyle: {
+        color: 'white',
+      },
+      headerTintColor: 'white', // header back button color
+      headerRight: (
+        <Icon
+          name="home"
+          size={25}
+          color="white"
+          style={{marginRight: 15}}
+          onPress={() => navigation.navigate('Anasayfa')}
+        />
+      ),
+    }),
+  },
+  HGShesapAc: {
+    screen: HGShesapAc,
+    navigationOptions: ({navigation}) => ({
+      title: 'HGShesapAc',
       headerStyle: {
         backgroundColor: '#708090',
       },

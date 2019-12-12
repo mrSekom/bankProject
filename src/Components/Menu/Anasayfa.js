@@ -228,7 +228,7 @@ export default class Anasayfa extends Component {
               <TouchableOpacity
                 style={styles.buttonStyleMenu}
                 onPress={() => {
-                  this.props.navigation.navigate('FaturaOdemeKurumSecimi', { musteriNo: musteriNo, islemTuruID: 5 });
+                  this.props.navigation.navigate('HGSgiris', { token: this.state.token });
                 }}>
                 <Icon
                   name="money"
