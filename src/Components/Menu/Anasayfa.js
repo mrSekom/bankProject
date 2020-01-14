@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, ScrollView, BackHandler, FlatList, AsyncStorage, Button, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, RefreshControl,ScrollView, BackHandler, FlatList, AsyncStorage, Button, Alert } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from '../faturaHavaleVirmanStyle.js';
@@ -13,7 +13,8 @@ export default class Anasayfa extends Component {
       hesaplar: [],
       tc: 0,
       toplamPara: 0,
-      isFetching:false
+      isFetching:false,
+      refreshing: false,
     };
 
     //alert('Anasayfa: ' + JSON.stringify(this.props.navigation.state.params.mus));
@@ -31,7 +32,7 @@ export default class Anasayfa extends Component {
 
   giveCus = async () => {
     let deger = await AsyncStorage.getItem('customerNo');
-    alert("customerNo1111:" + deger);
+ //   alert("customerNo1111:" + deger);
     console.log("degerrrr:  " + deger);
     this.setState({
       customerNo: deger
@@ -111,12 +112,7 @@ export default class Anasayfa extends Component {
     });
   }
 
-  onRefresh = ()=>{
-    this.setState({
-      isFetching: true,
-    });
-    this.getAccs();
-  }
+ 
 
   hesapKapat = (accountNo) => {
     fetch(`http://207.154.196.92:5002/api/BankAccount/` + accountNo, {
@@ -150,11 +146,24 @@ export default class Anasayfa extends Component {
       })
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.getAccs();
+      this.setState({refreshing: false});
+  }
+
   render() {
     const { musteriNo } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <ScrollView>
+        
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
+          />
+        }>
+     
           <View style={styles.header}>
             <Icon name="money" style={{ marginTop: 15 }} size={90} color="#708090"></Icon>
             <Text style={styles.total, { marginTop: 15 }}>VARLIKLARIM</Text>
@@ -208,6 +217,24 @@ export default class Anasayfa extends Component {
                 </Icon>
               </TouchableOpacity>
             </View>
+
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.buttonStyleMenu}
+                onPress={() => {
+                  this.props.navigation.navigate('KrediTransaction');
+                }}>
+                <Icon
+                  name="exchange"
+                  size={16}
+                  color="white"
+                  backgroundColor="#708090">
+                  <Text style={styles.buttonColorMenu}> Kredi Verme</Text>
+                </Icon>
+              </TouchableOpacity>
+            </View>
+
+
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.buttonStyleMenu}

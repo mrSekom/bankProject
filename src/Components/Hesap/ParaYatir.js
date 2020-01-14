@@ -78,7 +78,7 @@ export default class ParaYatir extends Component {
   render() {
     return (
       <View>
-        <Text> ParaYatır </Text>
+       
         <FlatList 
                     style={{ height: 300}}
                     data={this.state.hesaplar}

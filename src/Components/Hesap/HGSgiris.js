@@ -41,7 +41,7 @@ export default class HGSgiris extends Component {
                     <TouchableOpacity
                         style={styles.buttonStyleMenu}
                         onPress={() => {
-                          
+                            this.props.navigation.navigate('HGSyatir', { token: this.state.token });
                         }}>
                         <Icon
                             name="money"
@@ -49,6 +49,21 @@ export default class HGSgiris extends Component {
                             color="white"
                             backgroundColor="#708090">
                             <Text style={styles.buttonColorMenu}> HGS PARA YATIR </Text>
+                        </Icon>
+                    </TouchableOpacity>
+
+                    
+                    <TouchableOpacity
+                        style={styles.buttonStyleMenu}
+                        onPress={() => {
+                            this.props.navigation.navigate('HGSHesaplarim', { token: this.state.token });
+                        }}>
+                        <Icon
+                            name="money"
+                            size={16}
+                            color="white"
+                            backgroundColor="#708090">
+                            <Text style={styles.buttonColorMenu}> HGS HESAPLARIM </Text>
                         </Icon>
                     </TouchableOpacity>
                 </View>

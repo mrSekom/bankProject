@@ -8,6 +8,10 @@ import HGSgiris from './Components/Hesap/HGSgiris';
 import Hesaplar from './Components/Hesap/Hesaplar';
 import Hesaplarim from './Components/Hesap/Hesaplarim';
 import HGShesapAc from './Components/Hesap/HGShesapAc';
+import HGSHesaplarim from './Components/Hesap/HGSHesaplarim';
+import KrediTransaction from './Components/Hesap/KrediTransaction';
+import HesapSecHgs from './Components/Hesap/HesapSecHgs';
+import HGSyatir from './Components/Hesap/HGSyatir';
 import HesapDetaylari from './Components/Hesap/HesapDetaylari';
 import HesapHareketleri from './Components/Hesap/HesapHareketleri';
 import HesapParaCekme from './Components/Hesap/HesapParaCekme';
@@ -33,6 +37,8 @@ import FaturaOdemeOnayEkrani from './Components/Fatura/FaturaOdemeOnayEkrani';
 import HesapHareket from './Components/Hesap/HesapHareket';
 
 const MainNavigator = createStackNavigator({
+ 
+
   Login:{
     screen: Login,
     navigationOptions: {
@@ -49,7 +55,40 @@ const MainNavigator = createStackNavigator({
       headerTintColor: 'white', // header back button color
     }),
   },
- 
+  KrediTransaction: {
+    screen: KrediTransaction,
+    navigationOptions: ({navigation}) => ({
+      title: 'Kredi Transaction',
+      headerStyle: {
+        backgroundColor: '#708090',
+      },
+      headerTintColor: 'white', // header back button color
+    }),
+  },
+
+  HGSHesaplarim: {
+    screen: HGSHesaplarim,
+    navigationOptions: ({navigation}) => ({
+      title: 'HGS Hesaplarim',
+      headerStyle: {
+        backgroundColor: '#708090',
+      },
+      headerTintColor: 'white', // header back button color
+    }),
+  },
+//HesapSecHgs
+
+HesapSecHgs: {
+  screen: HesapSecHgs,
+  navigationOptions: ({navigation}) => ({
+    title: 'Hesap Sec Hgs',
+    headerStyle: {
+      backgroundColor: '#708090',
+    },
+    headerTintColor: 'white', // header back button color
+  }),
+},
+
   ParaCekme: {
     screen: ParaCekme,
     navigationOptions: ({navigation}) => ({
@@ -72,6 +111,7 @@ const MainNavigator = createStackNavigator({
     }),
   },
 
+  
   KullaniciProfil: {
     screen: KullaniciProfil,
     navigationOptions: ({navigation}) => ({
@@ -541,6 +581,29 @@ const MainNavigator = createStackNavigator({
       ),
     }),
   },
+  HGSyatir: {
+    screen: HGSyatir,
+    navigationOptions: ({navigation}) => ({
+      title: 'HGSyatir',
+      headerStyle: {
+        backgroundColor: '#708090',
+      },
+      headerTitleStyle: {
+        color: 'white',
+      },
+      headerTintColor: 'white', // header back button color
+      headerRight: (
+        <Icon
+          name="home"
+          size={25}
+          color="white"
+          style={{marginRight: 15}}
+          onPress={() => navigation.navigate('Anasayfa')}
+        />
+      ),
+    }),
+  },
+
   HesapDetaylari: {
     screen: HesapDetaylari,
     navigationOptions: ({navigation}) => ({

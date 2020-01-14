@@ -27,7 +27,7 @@ import Modal, {
 
 import { Formik } from 'formik';
 import * as yup from 'yup';
-
+import DialogInput from 'react-native-dialog-input';
 
 const validationSchema = yup.object().shape({
     balance: yup
@@ -36,7 +36,7 @@ const validationSchema = yup.object().shape({
         .moreThan(0.09, "0.1 den büyük olsun")
         .lessThan(999999, "küçük yap")
         .required("zorunlu alan"),
-        
+
 });
 
 export default class HGShesapAc extends Component {
@@ -45,31 +45,52 @@ export default class HGShesapAc extends Component {
         this.state = {
             hesaplar: [],
             token: this.props.navigation.state.params.token,
-            isDialogVisible:false,
-            selectedAccountNo:0,
-            customerNo:0,
-            receiverBankAccountNo:0,
-            defaultAnimationModal:false
+            isDialogVisible: false,
+            selectedAccountNo: 0,
+            customerNo: 0,
+            receiverBankAccountNo: 0,
+            defaultAnimationModal: false,
+            tc: 0,
+
         };
     }
+
+    /*
     
-/*
+    
+    */
+    give = async () => {
+        let deger = await AsyncStorage.getItem('customerNo');
+        console.log("degerrrr:  " + deger);
+        deger = parseInt(deger)
+        this.setState({
+            customerNo: deger
+        })
+        return deger;
+    }
 
+    giveTc = async () => {
+        let deger = await AsyncStorage.getItem('tc');
+        console.log("degerrrr:  " + deger);
+        deger = parseInt(deger)
+        this.setState({
+            tc: deger
+        })
+        return deger;
+    }
 
-*/
-
-    havaleMoney=(amount,receiverBankAccountNo,receiverCustomerNo)=>{
-        //alert("rcAc: +" + this.state.receiverBankAccountNo+ " cusno: " + this.state.customerNo+" selecAcount"+this.state.selectedAccountNo)
-        alert(typeof this.state.receiverBankAccountNo)
+    withdraw = (amount) => {
+        if(!(amount>0))
+        {
+            alert("boş ve rakam olmayan karakterler içermemeli ve 0 dan büyük olmalı")
+            return;
+        }
         console.log(this.state.token)
-         fetch("http://207.154.196.92:5002/api/Transaction/external", {
+        fetch("http://207.154.196.92:5002/api/BankAccount/withdraw", {
           method: 'POST',
           body: JSON.stringify({
-            "receiverBankAccountNo":receiverBankAccountNo,
-            "amount": amount,
-            "receiverCustomerNo": receiverCustomerNo,
-            "senderBankAccountNo": this.state.senderBankAccountNo,
-            "summary": "aabbcc",
+            "no": this.state.selectedAccountNo,
+            "amount": amount
           }),
     
           headers: {
@@ -77,45 +98,132 @@ export default class HGShesapAc extends Component {
             'Content-Type': 'application/json',
             Authorization: `bearer ${this.state.token}`
           }
-        }) .then((response) => response.json())
-        .then((responseData) => {
-          //alert(JSON.stringify(responseData));
-          var status = responseData['status'];
-          if (status == 'success') {
-            alert("Para Gönderildi!");
-            this.getAccs();
-            this.setState({
-              isDialogVisible:false
-            })
-          }
-          else {
+        }).then((response) => response.json())
+          .then((responseData) => {
+            //alert(JSON.stringify(responseData));
+            var status = responseData['status'];
+            if (status == 'success') {
+             
+              this.getAccs();
+              this.setState({
+                isDialogVisible: false
+              })
+              this.registerHgs(amount);
+            }
+            else {
+               
+              var errors = responseData['errors'];
+              if (errors != null)
+                alert("hata: " + JSON.stringify(errors));
+
+                alert("YETERSIZ PARA");
+            }
     
-            var errors = responseData['errors'];
-            if (errors != null)
-              alert("hata: " + JSON.stringify(errors));
-            else
-              alert(responseData['message'])
-          }
     
-    
-        })
-        .catch((error) => {
-          alert(error);
-        })
+          })
+          .catch((error) => {
+           // alert(error);
+          })
     
       }
 
 
 
-give = async () => {
-    let deger = await AsyncStorage.getItem('customerNo');
-    console.log("degerrrr:  " + deger);
-    deger=parseInt(deger)
-    this.setState({
-        customerNo: deger
-    })
-    return deger;
-  }
+    registerHgs = (money) => {
+        //alert("rcAc: +" + this.state.receiverBankAccountNo+ " cusno: " + this.state.customerNo+" selecAcount"+this.state.selectedAccountNo)
+       
+        console.log(this.state.token)
+        fetch("http://207.154.196.92:5003/api/Account", {
+            method: 'POST',
+            body: JSON.stringify({
+                "tcNo": this.state.tc
+            }),
+
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `bearer ${this.state.token}`
+            }
+        }).then((response) => response.json())
+            .then((responseData) => {
+               // alert(JSON.stringify(responseData));
+               var status = responseData['status'];
+               if (status == 'success') {
+                   var newHgsNo = responseData['hgsNo'];
+                    this.depositHgs(money, newHgsNo, this.state.selectedAccountNo);
+                   
+
+               }
+                else {
+
+                    var errors = responseData['errors'];
+                    if (errors != null)
+                        alert("hata: " + JSON.stringify(errors));
+                    else
+                        alert(responseData['message'])
+                 }
+
+
+            })
+            .catch((error) => {
+                alert(error);
+            })
+
+    }
+
+
+
+    depositHgs = (balance, hgsNo, bankAccountNo) => {
+        //alert("rcAc: +" + this.state.receiverBankAccountNo+ " cusno: " + this.state.customerNo+" selecAcount"+this.state.selectedAccountNo)
+        alert(typeof this.state.receiverBankAccountNo)
+        console.log(this.state.token)
+        fetch("http://207.154.196.92:5003/api/Account/deposit", {
+            method: 'POST',
+            body: JSON.stringify({
+                "hgsNo": hgsNo,
+                "balance": balance,
+                "bankAccountNo": bankAccountNo
+
+
+            }),
+
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: `bearer ${this.state.token}`
+            }
+        }).then((response) => response.json())
+            .then((responseData) => {
+                //alert(JSON.stringify(responseData));
+                var status = responseData['status'];
+
+                if (status == 'success') {
+                    alert("HGS Hesap açıldı.! Yeni Hgs No: " + hgsNo +" \n Para işlemi başarılı.");
+
+                   
+                }
+                else {
+
+                    var errors = responseData['errors'];
+                    if (errors != null)
+                        alert("hata: " + JSON.stringify(errors));
+                   
+                }
+
+
+            })
+            .catch((error) => {
+                //alert(error);
+            })
+
+    }
+
+
+
+
+
+
+
     getAccs = () => {
 
         fetch(`http://207.154.196.92:5002/api/BankAccount`, {
@@ -133,27 +241,26 @@ give = async () => {
     };
 
     componentDidMount() {
-        this.getAccs();
         this.give();
+        this.getAccs();
+        this.giveTc();
     }
 
     render() {
         //const { musteriNo,islemTuruID } = this.props.navigation.state.params;
-       // alert(this.state.receiverBankAccountNo+"jhh")
+        // alert(this.state.receiverBankAccountNo+"jhh")
         let hesaplar = this.state.hesaplar.map((hesap) => {
             return (
                 <View style={styles.contContainer} >
                     <TouchableOpacity style={styles.buttonContainer}
-                        onPress={() => { this.setState({defaultAnimationModal:true,senderBankAccountNo:hesap.no}) }}>
+                        onPress={() => { this.setState({ isDialogVisible: true, selectedAccountNo: hesap.no }) }}>
                         <Text style={styles.hesapNo}> {hesap.no}  </Text>
                         <Text style={styles.hesapText}> Bakiye: {hesap.balance} TL</Text>
                     </TouchableOpacity>
-
-
                 </View>
-            
+
             )
-            
+
         })
         return (
 
@@ -169,96 +276,14 @@ give = async () => {
                         {hesaplar}
                     </View>
                 </ScrollView>
-                <Formik initialValues={{ balance: 0,statement:"",receiverBankAccountNo:0,receiverCustomerNo:0 }}
-                        onSubmit={(values, actions) => {
-                            this.havaleMoney(values.balance,values.receiverBankAccountNo,values.receiverCustomerNo);
-                            
-                            setTimeout(() => {
-                                actions.setSubmitting(false);
-                            }, 1000);
-
-                        }}
-                        validationSchema={validationSchema}>
-                        {formikProps => (
-                            <Modal
-                                width={0.9}
-                                visible={this.state.defaultAnimationModal}
-                                rounded
-                                actionsBordered
-                                onTouchOutside={() => {
-                                    //this.setState({ defaultAnimationModal: false });
-                                }}
-                                modalTitle={
-                                    <ModalTitle
-                                        title="Havale Yap"
-                                        align="left"
-                                    />
-                                }
-                                footer={
-                                    <ModalFooter>
-                                        <ModalButton
-                                            text="İPTAL"
-                                            bordered
-                                            onPress={() => {
-                                                this.setState({ defaultAnimationModal: false });
-                                            }}
-                                            key="button-1"
-                                        />
-                                        <ModalButton
-                                            text="GÖNDER"
-                                            bordered
-                                            onPress={formikProps.handleSubmit}
-                                            key="button-2"
-                                        />
-                                    </ModalFooter>
-                                }
-                            >
-                                <ModalContent
-                                    style={{ backgroundColor: '#fff' }}
-                                >
-                                    <ScrollView>
-                                        <Text>Gönderilecek HesapNo: {this.state.receiverBankAccountNo} </Text>
-                            <Text> sddds { this.state.customerNo}</Text>
-                            <Text> senderBankAccountNo { this.state.senderBankAccountNo}</Text>
-                                        <Text style={{ color: 'red', marginBottom: 2 }}>
-                                            {formikProps.errors.receiverAccountNo}
-                                        </Text>
-                                        <Text>Alıcı Hesap No</Text>
-                                        <TextInput
-                                            onChangeText={formikProps.handleChange("receiverBankAccountNo")}
-                                            maxLength={30}
-                                            style={{ marginBottom: 10, width: 250, backgroundColor: '#cfcfcf' }}
-                                        //defaultValue='1'              
-                                        />
-                                        <Text>Alıcı Müşteri No</Text>
-                                        <TextInput
-                                            onChangeText={formikProps.handleChange("receiverCustomerNo")}
-                                            maxLength={30}
-                                            style={{ marginBottom: 10, width: 250, backgroundColor: '#cfcfcf' }}
-                                        //defaultValue='1'              
-                                        />
-                                        <Text>Gönderilecek Para Miktarı</Text>
-                                        <TextInput
-                                            onChangeText={formikProps.handleChange("balance")}
-                                            maxLength={30}
-                                            style={{ marginBottom: 10, width: 250, backgroundColor: '#cfcfcf' }}
-                                        //defaultValue='1'              
-                                        />
-                                        <Text style={{ color: 'red', marginBottom: 2 }}>
-                                            {formikProps.errors.balance}
-                                        </Text>
-                                        <Text>Açıklama</Text>
-                                        <TextInput
-                                            maxLength={30}
-                                            style={{ marginBottom: 10, width: 250, backgroundColor: '#cfcfcf' }}
-                                        //defaultValue='1'              
-                                        />
-
-                                    </ScrollView>
-                                </ModalContent>
-                            </Modal>
-                        )}
-                    </Formik>
+                <DialogInput isDialogVisible={this.state.isDialogVisible}
+                    title={"Hgs Hesabı Aç tc: "+this.state.tc}
+                    message={"Para Miktarını Giriniz"}
+                    hintInput={""}
+                    textInputProps={{ keyboardType: 'decimal-pad' }}
+                    submitInput={(inputText) => { this.withdraw(inputText) }}
+                    closeDialog={() => this.setState({ isDialogVisible: false })}>
+                </DialogInput>
             </View>
         );
     }

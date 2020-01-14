@@ -31,6 +31,7 @@ export default class VirmanAliciHesap extends Component {
 }
 
   render() {
+    let ffggf;
     //const { musteriNo,islemTuruID } = this.props.navigation.state.params;
     let hesaplar = this.state.hesaplar.map((hesap) => {
       return (
